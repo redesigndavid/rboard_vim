@@ -42,7 +42,10 @@ class RBInterface():
     def __init__(self, url):
         self.client = RBClient(url)
         self.root = self.client.get_root()
-        self._version = float(self.root.rsp['product']['version'].split()[0])
+        try:
+            self._version = float(self.root.rsp['product']['version'].split()[0])
+        except:
+            self._version = 0.0
         self._templates = self.root.rsp['uri_templates']
         self._files = {}
         self._file_data = {}
