@@ -1,0 +1,11 @@
+
+
+
+setenv PROJ rboard_vim 
+setenv PROJHOME "~/projects/$PROJ"
+
+setenv PATH $PROJHOME/bin:$PATH
+source $PROJHOME/.aliases
+cd $PROJHOME
+
+
