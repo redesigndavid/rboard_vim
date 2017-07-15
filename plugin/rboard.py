@@ -26,7 +26,7 @@ _buffer_keybindings = {
         'R': 'ViewDraftReview()',
         },
     'diff-comment': {
-        'y': 'SendComment()',
+        'y': 'SaveComment()',
         'n': 'TabClose()',
         'q': 'TabClose()',
         },
@@ -208,7 +208,7 @@ def action_view_request():
                 contents.append("# %s : %s" % (key, line))
     diffs = review_request.get_diffs()
 
-    tvariables = None 
+    tvariables = None
 
     if diffs.rsp['total_results']:
 
@@ -272,17 +272,17 @@ def action_make_comment():
              'start': start,
              'filediff_id': filediff_id,
              'num_lines': (end - start + 1)}
-
+    lines = ['# diff comments', '']
     diff_fname = 'diff-comment-%s-%s' % (
             review_request_id, filediff_id)
-    create_buffer('diff-comment', 
+    create_buffer('diff-comment',
             cmd='silent! tabnew',
             contents=lines, fname=diff_fname,
             tvariables=tvars)
 
 
 def action_save_comment():
-    """Action save comment.""" 
+    """Action save comment."""
     review_request_id = get_tabvar('review_request_id')
     start = get_tabvar('start')
     num_lines = get_tabvar('num_lines')
@@ -322,14 +322,14 @@ def action_view_draft_review():
         lines.append("- %s [%s-%s] -" % (title, start, end))
         lines.extend(comment.splitlines())
         lines.append('')
-        
+
     if review_draft['body_bottom']:
         lines.append('# tail :')
         lines.extend(review_draft['body_bottom'].splitlines())
         lines.append('')
         lines.append('')
 
-    create_buffer('review-draft', 
+    create_buffer('review-draft',
             contents=lines, fname='review-draft-%s' % review_request_id,
             tvariables={'review_request_id': review_request_id},
             readonly=True)
