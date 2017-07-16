@@ -103,23 +103,25 @@ class RBInterface():
         return self._files[url]
 
     def get_dst_lines(self, review_request_id, diff_revision, filediff_id):
-        file_obj = self.get_file(review_request_id, diff_revision, filediff_id)
         if self._version >= 3.0:
+            file_obj = self.get_file(review_request_id, diff_revision, filediff_id)
             return file_obj.get_patched_file()['data'].splitlines()
 
+        dest_file = self.get_file_dst(review_request_id, diff_revision, filediff_id)
         updates = self.get_filediff_data(review_request_id, diff_revision, filediff_id)
         dst_updates = updates['dst_updates']
-        dst_lines = get_p4_file(file_obj['dest_file']) 
+        dst_lines = get_p4_file(dest_file) 
         for lineno, linevalue in dst_updates.iteritems():
             dst_lines[lineno] = linevalue
         return lines
 
     def get_src_lines(self, review_request_id, diff_revision, filediff_id):
-        file_obj = self.get_file(review_request_id, diff_revision, filediff_id)
         try:
             if self._version >= 3.0:
+                file_obj = self.get_file(review_request_id, diff_revision, filediff_id)
                 return file_obj.get_original_file()['data'].splitlines()
-            return get_p4_file(file_obj['source_file'])
+            source_file = self.get_file_src(review_request_id, diff_revision, filediff_id)
+            return get_p4_file(source_file)
         except:
             return None
 
