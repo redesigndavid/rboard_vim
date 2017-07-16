@@ -113,7 +113,7 @@ class RBInterface():
         dst_lines = get_p4_file(dest_file) 
         for lineno, linevalue in dst_updates.iteritems():
             dst_lines[lineno] = linevalue
-        return lines
+        return dst_lines
 
     def get_src_lines(self, review_request_id, diff_revision, filediff_id):
         try:
