@@ -145,7 +145,7 @@ def action_view_diff():
             filediff_id=filediff_id)
 
     dst = 'DST-%s' % interface.get_file_dst(**file_fields)
-    dst = 'SRC-%s' % interface.get_file_src(**file_fields)
+    src = 'SRC-%s' % interface.get_file_src(**file_fields)
 
     tab_buffers = [src, dst]
     updates = interface.get_filediff_data(
