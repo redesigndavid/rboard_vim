@@ -278,7 +278,7 @@ def action_make_comment():
     create_buffer('diff-comment',
             cmd='silent! tabnew',
             contents=lines, fname=diff_fname,
-            tvariables=tvars)
+            no_title=True, tvariables=tvars)
 
 
 def action_save_comment():
@@ -287,7 +287,9 @@ def action_save_comment():
     start = get_tabvar('start')
     num_lines = get_tabvar('num_lines')
     filediff_id = get_tabvar('filediff_id')
-    comment_string = '\n'.join(vim.current.buffer[:])
+    comment_string = '\n'.join(
+            line for line in vim.current.buffer[:]
+            if not line.startswith('#'))
 
     interface = get_interface()
     interface.make_comment(
