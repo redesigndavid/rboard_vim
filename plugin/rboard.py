@@ -94,7 +94,7 @@ def create_buffer(
             vim.command('%snoremap <buffer> %s :call <SID>%s<CR>' % (
                 key[0], key[1], command))
         else:
-            vim.command('nnoremap <buffer> %s :silent! call <SID>%s<CR>' % (
+            vim.command('nnoremap <buffer> %s :call <SID>%s<CR>' % (
                 key, command))
 
     # add tab variables
