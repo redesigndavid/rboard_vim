@@ -139,13 +139,13 @@ def action_view_diff():
     revision = get_tabvar('diff_revision')
 
     # get the file obj
-    fileobj = interface.get_file(
+    file_fields = dict(
             review_request_id=review_request_id,
             diff_revision=revision,
             filediff_id=filediff_id)
 
-    src = 'SRC-%s' % fileobj['source_file']
-    dst = 'DST-%s' % fileobj['dest_file']
+    dst = 'DST-%s' % interface.get_file_dst(**file_fields)
+    dst = 'SRC-%s' % interface.get_file_src(**file_fields)
 
     tab_buffers = [src, dst]
     updates = interface.get_filediff_data(

@@ -14,7 +14,7 @@ def get_p4_conn():
         _p4_conn = P4.P4()
     if not _p4_conn.connected():
         _p4_conn.connect()
-    return _p4_conn 
+    return _p4_conn
 
 
 def get_p4_file(p4filepath):
@@ -49,6 +49,7 @@ class RBInterface():
         self._templates = self.root.rsp['uri_templates']
         self._files = {}
         self._file_data = {}
+        self._simplefile_data = {}
 
     @authentication_wrapper
     def get_review_requests(self, current_line):
@@ -56,10 +57,36 @@ class RBInterface():
 
     @authentication_wrapper
     def get_review_request(self, review_request_id):
-        review_request_template = self._templates['review_request'] 
+        review_request_template = self._templates['review_request']
         url = review_request_template.format(
                 review_request_id=review_request_id)
         return self.client.get_url(url)
+
+    @authentication_wrapper
+    def get_file_src(self, review_request_id, diff_revision, filediff_id):
+        url = self._templates['diff'].format(
+                review_request_id=review_request_id,
+                diff_revision=diff_revision)
+        if url not in self._simplefile_data:
+            diff_obj = self.client.get_url(url)
+            self._simplefile_data[url] = diff_obj
+        diff_obj = self._simplefile_data[url]
+        for filesimple in diff_obj.get_files():
+            if filesimple['id'] == filediff_id:
+                return filesimple['source_file']
+
+    @authentication_wrapper
+    def get_file_dst(self, review_request_id, diff_revision, filediff_id):
+        url = self._templates['diff'].format(
+                review_request_id=review_request_id,
+                diff_revision=diff_revision)
+        if url not in self._simplefile_data:
+            diff_obj = self.client.get_url(url)
+            self._simplefile_data[url] = diff_obj
+        diff_obj = self._simplefile_data[url]
+        for filesimple in diff_obj.get_files():
+            if filesimple['id'] == filediff_id:
+                return filesimple['dest_file']
 
     @authentication_wrapper
     def get_file(self, review_request_id, diff_revision, filediff_id):
